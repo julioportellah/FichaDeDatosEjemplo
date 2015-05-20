@@ -277,6 +277,7 @@
                     android:layout_height="wrap_content" />
 
                 <EditText
+                    android:enabled="false"
                     android:id="@+id/tipo_de_curso"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
