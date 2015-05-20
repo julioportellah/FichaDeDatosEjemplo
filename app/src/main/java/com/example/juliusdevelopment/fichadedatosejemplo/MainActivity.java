@@ -12,6 +12,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.File;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -160,20 +161,56 @@ public class MainActivity extends ActionBarActivity {
         }
 
         public void saveData(View view){
-
-            String nombresCompletosText, apellidoPaternoText,apellidoMaternoText;
             boolean decider;
             decider=checkObligatoryFields();
-            nombresCompletosText=nombresCompletos.getText().toString();
-            apellidoPaternoText=apellidoPaterno.getText().toString();
-            apellidoMaternoText=apellidoMaterno.getText().toString();
 
             if (decider){
                 Toast.makeText(MainActivity.this, "Éxito!!!", Toast.LENGTH_SHORT).show();
+                recordData();
             }
-
-            //
         }
+
+        private void recordData(){
+/*
+
+* */
+            String nombresCompletosText, apellidoPaternoText,apellidoMaternoText,dniText,distritoText;
+            String telefonoCasaText, celularText, correoElectronicoText, preferenciasText;
+
+            nombresCompletosText=nombresCompletos.getText().toString();
+            apellidoPaternoText=apellidoPaterno.getText().toString();
+            apellidoMaternoText=apellidoMaterno.getText().toString();
+            dniText=numeroDNI.getText().toString();
+            distritoText=distrito.getText().toString();
+            telefonoCasaText=telefonoCasa.getText().toString();
+            celularText=telefonoCelular.getText().toString();
+
+/*
+            String baseDir = android.os.Environment.getExternalStorageDirectory().getAbsolutePath();
+            String fileName = "AnalysisData.csv";
+            String filePath = baseDir + File.separator + fileName;
+            File f = new File(filePath );
+            CSVWriter writer;
+            // File exist
+            if(f.exists() && !f.isDirectory()){
+                mFileWriter = new FileWriter(filePath , true);
+                writer = new CSVWriter(mFileWriter);
+            }
+            else {
+                writer = new CSVWriter(new FileWriter(filePath));
+            }
+            String[] data = {"Ship Name","Scientist Name", "...",new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").formatter.format(date)});
+
+            writer.writeNext(data);
+
+            writer.close();*/
+
+
+
+
+        }
+
+
 
         private String getLocalTime()
         {
