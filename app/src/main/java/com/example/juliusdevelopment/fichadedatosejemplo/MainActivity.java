@@ -71,9 +71,6 @@ public class MainActivity extends ActionBarActivity {
             interesTelecomunicaciones=(CheckBox)findViewById(R.id.interes_telecomunicaciones);
             interesTelematica=(CheckBox)findViewById(R.id.interes_telematica);
             interesCurso=(CheckBox)findViewById(R.id.interes_curso);
-
-
-
         }
 
 
@@ -109,7 +106,7 @@ public class MainActivity extends ActionBarActivity {
 
         private boolean checkObligatoryFields(){
             boolean chkNombres, chkApellidoPaterno,chkApellidoMaterno,chkDNI,chkDistrito,chkTelefonoCasa;
-            boolean chkCelular, chkCorreoElectronico;
+            boolean chkCelular, chkCorreoElectronico, chkPrefTelma,chkPrefTelcom, chkPrefCursos, chkCursosTipo;
             boolean veredict=false;
 
 
@@ -121,7 +118,10 @@ public class MainActivity extends ActionBarActivity {
             chkTelefonoCasa=telefonoCasa.getText().toString().isEmpty();
             chkCelular=telefonoCelular.getText().toString().isEmpty();
             chkCorreoElectronico=correoElectronico.getText().toString().isEmpty();
-
+            chkPrefTelma=interesTelematica.isChecked();
+            chkPrefTelcom=interesTelematica.isChecked();
+            chkPrefCursos=interesCurso.isChecked();
+            chkCursosTipo=interesCursoTexto.getText().toString().isEmpty();
 
             if (chkApellidoPaterno) {
                 Toast.makeText(MainActivity.this, "Introduzca el apellido paterno", Toast.LENGTH_SHORT).show();
@@ -146,6 +146,12 @@ public class MainActivity extends ActionBarActivity {
                 return veredict;
             }else if(chkCorreoElectronico){
                 Toast.makeText(MainActivity.this, "Introduzca el Correo Electrónico", Toast.LENGTH_SHORT).show();
+                return veredict;
+            }else if(!chkPrefCursos && !chkPrefTelcom && !chkPrefTelma){
+                Toast.makeText(MainActivity.this, "Elija sus intereses", Toast.LENGTH_SHORT).show();
+                return veredict;
+            }else if(chkPrefCursos && chkCursosTipo){
+                Toast.makeText(MainActivity.this, "Especifíque su curso", Toast.LENGTH_SHORT).show();
                 return veredict;
             }else{
                 veredict=true;
