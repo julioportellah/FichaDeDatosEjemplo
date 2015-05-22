@@ -27,20 +27,20 @@ import com.opencsv.*;
 public class MainActivity extends ActionBarActivity {
 
         Button buttonSaveData;
-        //Parte Superior
+        //Campos OPCIONALES
         EditText institucionProcedencia,distritoProcedencia,tipoEvento;
+        EditText edad,fechaNacimiento;
+        //Parte Superior
+        //Campos Obligatorios
         private TextView lblFecha;
         //Parte de los nombres
         EditText apellidoPaterno,apellidoMaterno,nombresCompletos;
         //Parte de lalos datos personales
         EditText numeroDNI;
-
         //Parte de domicilio
         EditText distrito;
-
         //Parte de telefono,cel y correo
         EditText telefonoCasa, telefonoCelular, correoElectronico;
-
         //Parte de intereses
         EditText interesCursoTexto;
 
@@ -50,27 +50,29 @@ public class MainActivity extends ActionBarActivity {
             super.onCreate(savedInstanceState);
             setContentView(R.layout.activity_main);
 
-            lblFecha=(TextView)findViewById(R.id.lblDate);
+            lblFecha = (TextView) findViewById(R.id.lblDate);
             lblFecha.setText(getLocalTime());
-            buttonSaveData=(Button)findViewById(R.id.guardar_datos);
+            buttonSaveData = (Button) findViewById(R.id.guardar_datos);
             //buttonSaveData.setOnClickListener(saveHandler);
 
+            //DECLARANDO CAMPOS OPCIONALES
+            //Componentes de la ficha de datos
+            institucionProcedencia=(EditText)findViewById(R.id.institucion_procedencia);
+            distritoProcedencia=(EditText)findViewById(R.id.distrito_procedencia);
+            tipoEvento=(EditText)findViewById(R.id.tipo_de_evento);
+            //DECLARANDO CAMPOS OBLIGATORIOS
             //Declarando nombres
             apellidoPaterno=(EditText)findViewById(R.id.apellido_paterno);
             apellidoMaterno=(EditText)findViewById(R.id.apellido_materno);
             nombresCompletos=(EditText)findViewById(R.id.nombres_completos);
-
             //Declarando datosPersonales
             numeroDNI=(EditText)findViewById(R.id.dni);
-
             //Declarando Distrito
             distrito=(EditText)findViewById(R.id.distrito);
-
             //Declarando Datos
             telefonoCasa=(EditText)findViewById(R.id.telefono_casa);
             telefonoCelular=(EditText)findViewById(R.id.celular);
             correoElectronico=(EditText)findViewById(R.id.correo_electronico);
-
             //Declarando Intereses
             interesCursoTexto=(EditText)findViewById(R.id.tipo_de_curso);
             interesTelecomunicaciones=(CheckBox)findViewById(R.id.interes_telecomunicaciones);
@@ -107,6 +109,15 @@ public class MainActivity extends ActionBarActivity {
                     }break;
             }
         }
+
+        private String getLocalTime()
+        {
+            DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
+            Calendar cal = Calendar.getInstance();
+            String horarioActual=dateFormat.format(cal.getTime()).toString();
+            return horarioActual;
+        }
+
 
         String preferencias(){
             String interes="";
@@ -183,10 +194,18 @@ public class MainActivity extends ActionBarActivity {
         }
 
         private void recordData(){
+
+            //CAMPOS OBLIGATORIOS
+            String fechaText;
             String nombresCompletosText, apellidoPaternoText,apellidoMaternoText,dniText,distritoText;
             String telefonoCasaText, celularText, correoElectronicoText, preferenciasText;
-            String protoCadena;
 
+            //CAMPOS OPCIONALES
+            String protoCadena;
+            String institucionProcedenciaText,distritoProcedenciaText,tipoEventoText;
+
+            //CAMPOS OBLIGATORIOS
+            fechaText=lblFecha.getText().toString();
             nombresCompletosText=nombresCompletos.getText().toString();
             apellidoPaternoText=apellidoPaterno.getText().toString();
             apellidoMaternoText=apellidoMaterno.getText().toString();
@@ -196,18 +215,26 @@ public class MainActivity extends ActionBarActivity {
             celularText=telefonoCelular.getText().toString();
             correoElectronicoText=correoElectronico.getText().toString();
             preferenciasText=preferencias();
-            //protoCadena=nombresCompletosText+","+apellidoPaternoText
-            //String baseDir2= Environment.getDataDirectory().getAbsolutePath();
+
+            //CAMPOS OPCIONALES
+            institucionProcedenciaText=institucionProcedencia.getText().toString();
+            distritoProcedenciaText=distritoProcedencia.getText().toString();
+            tipoEventoText=tipoEvento.getText().toString();
 
             String baseDir = android.os.Environment.getExternalStorageDirectory().getAbsolutePath();
             String fileName = "AnalysisData.csv";
             String filePath = baseDir + File.separator + fileName;
             String FILENAME="data.csv";
 
+            String header[]={"Fecha de Registro","Institucion de Procedencia","Distrito de Institución de Procedencia","Tipo de Evento",
+                    "Nombres","Apellido Paterno","Apellido Materno",
+                    "DNI","Distrito","Telefono Fijo","Telefono Celular","E-mail","Intereses"};
+            String finalString[]={fechaText,institucionProcedenciaText,distritoProcedenciaText,tipoEventoText,
+                    nombresCompletosText,apellidoPaternoText,apellidoMaternoText,dniText,distritoText,telefonoCasaText,celularText,correoElectronicoText,preferenciasText};
+
             String cabecera[]={"Fecha de Registro","Nombres","Apellido Paterno","Apellido Materno","DNI","Distrito","Telefono Fijo","Telefono Celular","E-mail","Intereses"};
             String cadenaFinal[]={lblFecha.getText().toString(),nombresCompletosText,apellidoPaternoText,apellidoMaternoText,dniText,distritoText,telefonoCasaText,celularText,correoElectronicoText,preferenciasText};
 
-            //String[] cadenaEjemplo="Problem?,LOL!".split(",");
             File f = new File(filePath );
             CSVWriter writer;
             try {
@@ -215,56 +242,21 @@ public class MainActivity extends ActionBarActivity {
                     Toast.makeText(MainActivity.this, "Información grabada en "+filePath.toString(), Toast.LENGTH_SHORT).show();
                     FileWriter mFileWriter = new FileWriter(filePath, true);
                     writer = new CSVWriter(mFileWriter);
-                    writer.writeNext(cadenaFinal);
+                    //writer.writeNext(cadenaFinal);
+                    writer.writeNext(finalString);
                     writer.close();
                 }else{
                     Toast.makeText(MainActivity.this, "Información grabada en "+filePath.toString(), Toast.LENGTH_SHORT).show();
                     writer=new CSVWriter(new FileWriter(filePath));
-                    writer.writeNext(cabecera);
-                    writer.writeNext(cadenaFinal);
+                    //writer.writeNext(cabecera);
+                    //writer.writeNext(cadenaFinal);
+                    writer.writeNext(header);
+                    writer.writeNext(finalString);
                     writer.close();
                 }
             } catch (IOException e) {
                 e.printStackTrace();
-            }/*
-            try{
-                FileOutputStream out=openFileOutput(FILENAME, Context.MODE_APPEND);
-                //FileOutputStream out=openFileOutput(FILENAME, Context.MODE_APPEND);
-                out.write(cadenaEjemplo.getBytes());
-                out.close();
-            }catch (Exception e){
-                e.printStackTrace();
-            }*/
-
-/*
-            String baseDir = android.os.Environment.getExternalStorageDirectory().getAbsolutePath();
-            String fileName = "AnalysisData.csv";
-            String filePath = baseDir + File.separator + fileName;
-            File f = new File(filePath );
-            CSVWriter writer;
-            // File exist
-            if(f.exists() && !f.isDirectory()){
-                FileWriter mFileWriter = new FileWriter(filePath, true);
-                writer = new CSVWriter(mFileWriter);
             }
-            else {
-                writer = new CSVWriter(new FileWriter(filePath));
-            }
-            String[] data = {"Ship Name","Scientist Name", "...",new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").formatter.format(date)});
-
-            writer.writeNext(data);
-
-            writer.close();*/
-        }
-
-
-
-        private String getLocalTime()
-        {
-            DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
-            Calendar cal = Calendar.getInstance();
-            String horarioActual=dateFormat.format(cal.getTime()).toString();
-            return horarioActual;
         }
 
         @Override
