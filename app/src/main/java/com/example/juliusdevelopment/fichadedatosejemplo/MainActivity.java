@@ -1,6 +1,8 @@
 package com.example.juliusdevelopment.fichadedatosejemplo;
 
+import android.content.Context;
 import android.content.DialogInterface;
+import android.os.Environment;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -11,14 +13,16 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
-
+import com.opencsv.*;
 
 public class MainActivity extends ActionBarActivity {
 
@@ -120,7 +124,7 @@ public class MainActivity extends ActionBarActivity {
             chkCelular=telefonoCelular.getText().toString().isEmpty();
             chkCorreoElectronico=correoElectronico.getText().toString().isEmpty();
             chkPrefTelma=interesTelematica.isChecked();
-            chkPrefTelcom=interesTelematica.isChecked();
+            chkPrefTelcom=interesTelecomunicaciones.isChecked();
             chkPrefCursos=interesCurso.isChecked();
             chkCursosTipo=interesCursoTexto.getText().toString().isEmpty();
 
@@ -165,7 +169,7 @@ public class MainActivity extends ActionBarActivity {
             decider=checkObligatoryFields();
 
             if (decider){
-                Toast.makeText(MainActivity.this, "Éxito!!!", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(MainActivity.this, "Éxito!!!", Toast.LENGTH_SHORT).show();
                 recordData();
             }
         }
@@ -185,6 +189,29 @@ public class MainActivity extends ActionBarActivity {
             telefonoCasaText=telefonoCasa.getText().toString();
             celularText=telefonoCelular.getText().toString();
 
+            //String baseDir2= Environment.getDataDirectory().getAbsolutePath();
+            String baseDir = android.os.Environment.getExternalStorageDirectory().getAbsolutePath();
+            String fileName = "AnalysisData.csv";
+            String filePath = baseDir + File.separator + fileName;
+            String FILENAME="data.csv";
+            String[] cadenaEjemplo="Problem?,LOL!".split(",");
+            try {
+                Toast.makeText(MainActivity.this, "GRABANDO!!!", Toast.LENGTH_SHORT).show();
+                CSVWriter writer=new CSVWriter(new FileWriter(filePath));
+                writer.writeNext(cadenaEjemplo);
+                writer.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }/*
+            try{
+                FileOutputStream out=openFileOutput(FILENAME, Context.MODE_APPEND);
+                //FileOutputStream out=openFileOutput(FILENAME, Context.MODE_APPEND);
+                out.write(cadenaEjemplo.getBytes());
+                out.close();
+            }catch (Exception e){
+                e.printStackTrace();
+            }*/
+
 /*
             String baseDir = android.os.Environment.getExternalStorageDirectory().getAbsolutePath();
             String fileName = "AnalysisData.csv";
@@ -193,7 +220,7 @@ public class MainActivity extends ActionBarActivity {
             CSVWriter writer;
             // File exist
             if(f.exists() && !f.isDirectory()){
-                mFileWriter = new FileWriter(filePath , true);
+                FileWriter mFileWriter = new FileWriter(filePath, true);
                 writer = new CSVWriter(mFileWriter);
             }
             else {
