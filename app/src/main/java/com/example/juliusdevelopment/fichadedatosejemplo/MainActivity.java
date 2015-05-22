@@ -108,6 +108,13 @@ public class MainActivity extends ActionBarActivity {
             }
         }
 
+        String preferencias(){
+            String interes="";
+            if (interesTelematica.isChecked())interes=interes+"Telematica/";
+            if (interesTelecomunicaciones.isChecked())interes=interes+"Telecomunicaciones/";
+            if (interesCurso.isChecked())interes=interes+interesCursoTexto.getText().toString();
+            return interes;
+        }
 
         private boolean checkObligatoryFields(){
             boolean chkNombres, chkApellidoPaterno,chkApellidoMaterno,chkDNI,chkDistrito,chkTelefonoCasa;
@@ -127,6 +134,7 @@ public class MainActivity extends ActionBarActivity {
             chkPrefTelcom=interesTelecomunicaciones.isChecked();
             chkPrefCursos=interesCurso.isChecked();
             chkCursosTipo=interesCursoTexto.getText().toString().isEmpty();
+
 
             if (chkApellidoPaterno) {
                 Toast.makeText(MainActivity.this, "Introduzca el apellido paterno", Toast.LENGTH_SHORT).show();
@@ -175,11 +183,9 @@ public class MainActivity extends ActionBarActivity {
         }
 
         private void recordData(){
-/*
-
-* */
             String nombresCompletosText, apellidoPaternoText,apellidoMaternoText,dniText,distritoText;
             String telefonoCasaText, celularText, correoElectronicoText, preferenciasText;
+            String protoCadena;
 
             nombresCompletosText=nombresCompletos.getText().toString();
             apellidoPaternoText=apellidoPaterno.getText().toString();
@@ -188,18 +194,36 @@ public class MainActivity extends ActionBarActivity {
             distritoText=distrito.getText().toString();
             telefonoCasaText=telefonoCasa.getText().toString();
             celularText=telefonoCelular.getText().toString();
-
+            correoElectronicoText=correoElectronico.getText().toString();
+            preferenciasText=preferencias();
+            //protoCadena=nombresCompletosText+","+apellidoPaternoText
             //String baseDir2= Environment.getDataDirectory().getAbsolutePath();
+
             String baseDir = android.os.Environment.getExternalStorageDirectory().getAbsolutePath();
             String fileName = "AnalysisData.csv";
             String filePath = baseDir + File.separator + fileName;
             String FILENAME="data.csv";
-            String[] cadenaEjemplo="Problem?,LOL!".split(",");
+
+            String cabecera[]={"Fecha de Registro","Nombres","Apellido Paterno","Apellido Materno","DNI","Distrito","Telefono Fijo","Telefono Celular","E-mail","Intereses"};
+            String cadenaFinal[]={lblFecha.getText().toString(),nombresCompletosText,apellidoPaternoText,apellidoMaternoText,dniText,distritoText,telefonoCasaText,celularText,correoElectronicoText,preferenciasText};
+
+            //String[] cadenaEjemplo="Problem?,LOL!".split(",");
+            File f = new File(filePath );
+            CSVWriter writer;
             try {
-                Toast.makeText(MainActivity.this, "GRABANDO!!!", Toast.LENGTH_SHORT).show();
-                CSVWriter writer=new CSVWriter(new FileWriter(filePath));
-                writer.writeNext(cadenaEjemplo);
-                writer.close();
+                if(f.exists()){
+                    Toast.makeText(MainActivity.this, "Información grabada en "+filePath.toString(), Toast.LENGTH_SHORT).show();
+                    FileWriter mFileWriter = new FileWriter(filePath, true);
+                    writer = new CSVWriter(mFileWriter);
+                    writer.writeNext(cadenaFinal);
+                    writer.close();
+                }else{
+                    Toast.makeText(MainActivity.this, "Información grabada en "+filePath.toString(), Toast.LENGTH_SHORT).show();
+                    writer=new CSVWriter(new FileWriter(filePath));
+                    writer.writeNext(cabecera);
+                    writer.writeNext(cadenaFinal);
+                    writer.close();
+                }
             } catch (IOException e) {
                 e.printStackTrace();
             }/*
@@ -231,10 +255,6 @@ public class MainActivity extends ActionBarActivity {
             writer.writeNext(data);
 
             writer.close();*/
-
-
-
-
         }
 
 
@@ -267,7 +287,6 @@ public class MainActivity extends ActionBarActivity {
             if (id == R.id.action_settings) {
                 return true;
             }
-
             return super.onOptionsItemSelected(item);
         }
 }
