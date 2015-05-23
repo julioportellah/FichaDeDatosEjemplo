@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
 import java.io.File;
@@ -30,6 +31,10 @@ public class MainActivity extends ActionBarActivity {
         //Campos OPCIONALES
         EditText institucionProcedencia,distritoProcedencia,tipoEvento;
         EditText edad,fechaNacimiento;
+        RadioButton isMale,isFemale;
+        EditText domicilio,provincia,departamento;
+
+
         //Parte Superior
         //Campos Obligatorios
         private TextView lblFecha;
@@ -60,6 +65,17 @@ public class MainActivity extends ActionBarActivity {
             institucionProcedencia=(EditText)findViewById(R.id.institucion_procedencia);
             distritoProcedencia=(EditText)findViewById(R.id.distrito_procedencia);
             tipoEvento=(EditText)findViewById(R.id.tipo_de_evento);
+            //Componentes de la ficha de datos personales
+            edad=(EditText)findViewById(R.id.edad);
+            fechaNacimiento=(EditText)findViewById(R.id.fecha_nacimiento);
+            isMale=(RadioButton)findViewById(R.id.is_male);
+            isFemale=(RadioButton)findViewById(R.id.is_female);
+            //Componentes de direccion
+            domicilio=(EditText)findViewById(R.id.domicilio);
+            provincia=(EditText)findViewById(R.id.provincia);
+            departamento=(EditText)findViewById(R.id.departamento);
+
+
             //DECLARANDO CAMPOS OBLIGATORIOS
             //Declarando nombres
             apellidoPaterno=(EditText)findViewById(R.id.apellido_paterno);
@@ -116,6 +132,13 @@ public class MainActivity extends ActionBarActivity {
             Calendar cal = Calendar.getInstance();
             String horarioActual=dateFormat.format(cal.getTime()).toString();
             return horarioActual;
+        }
+
+        private String getGender(){
+            String gender="";
+            if (isMale.isChecked())gender="Hombre";
+            if(isFemale.isChecked())gender="Mujer";
+            return gender;
         }
 
 
@@ -203,6 +226,9 @@ public class MainActivity extends ActionBarActivity {
             //CAMPOS OPCIONALES
             String protoCadena;
             String institucionProcedenciaText,distritoProcedenciaText,tipoEventoText;
+            String edadText,fechaNacimientoText,generoText;
+            String domicilioText,provinciaText,departamentoText;
+
 
             //CAMPOS OBLIGATORIOS
             fechaText=lblFecha.getText().toString();
@@ -220,17 +246,29 @@ public class MainActivity extends ActionBarActivity {
             institucionProcedenciaText=institucionProcedencia.getText().toString();
             distritoProcedenciaText=distritoProcedencia.getText().toString();
             tipoEventoText=tipoEvento.getText().toString();
+            edadText=edad.getText().toString();
+            fechaNacimientoText=fechaNacimiento.getText().toString();
+            generoText=getGender();
+            domicilioText=domicilio.getText().toString();
+            provinciaText=provincia.getText().toString();
+            departamentoText=departamento.getText().toString();
+
 
             String baseDir = android.os.Environment.getExternalStorageDirectory().getAbsolutePath();
             String fileName = "AnalysisData.csv";
             String filePath = baseDir + File.separator + fileName;
             String FILENAME="data.csv";
 
-            String header[]={"Fecha de Registro","Institucion de Procedencia","Distrito de Institución de Procedencia","Tipo de Evento",
-                    "Nombres","Apellido Paterno","Apellido Materno",
-                    "DNI","Distrito","Telefono Fijo","Telefono Celular","E-mail","Intereses"};
+            String header[]={"Fecha de Registro","Institucion de Procedencia","Distrito de Institución de Procedencia","Tipo de Evento"
+                    ,"Nombres","Apellido Paterno","Apellido Materno",
+                    "Edad","Sexo","Fecha de Nacimiento","DNI",
+                    "Domicilio","Distrito","Provincia","Departamento",
+                    "Telefono Fijo","Telefono Celular","E-mail","Intereses"};
             String finalString[]={fechaText,institucionProcedenciaText,distritoProcedenciaText,tipoEventoText,
-                    nombresCompletosText,apellidoPaternoText,apellidoMaternoText,dniText,distritoText,telefonoCasaText,celularText,correoElectronicoText,preferenciasText};
+                    nombresCompletosText,apellidoPaternoText,apellidoMaternoText,
+                    edadText,generoText,fechaNacimientoText,dniText,
+                    domicilioText,distritoText,provinciaText,departamentoText,
+                    telefonoCasaText,celularText,correoElectronicoText,preferenciasText};
 
             String cabecera[]={"Fecha de Registro","Nombres","Apellido Paterno","Apellido Materno","DNI","Distrito","Telefono Fijo","Telefono Celular","E-mail","Intereses"};
             String cadenaFinal[]={lblFecha.getText().toString(),nombresCompletosText,apellidoPaternoText,apellidoMaternoText,dniText,distritoText,telefonoCasaText,celularText,correoElectronicoText,preferenciasText};
