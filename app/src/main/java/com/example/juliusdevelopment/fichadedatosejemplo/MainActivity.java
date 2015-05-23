@@ -33,7 +33,8 @@ public class MainActivity extends ActionBarActivity {
         EditText edad,fechaNacimiento;
         RadioButton isMale,isFemale;
         EditText domicilio,provincia,departamento;
-
+        CheckBox medioEmail,medioWeb,medioReferencia,medioPapel,medioRadio,medioTV,medioFeria;
+        EditText medioOtros;
 
         //Parte Superior
         //Campos Obligatorios
@@ -74,7 +75,15 @@ public class MainActivity extends ActionBarActivity {
             domicilio=(EditText)findViewById(R.id.domicilio);
             provincia=(EditText)findViewById(R.id.provincia);
             departamento=(EditText)findViewById(R.id.departamento);
-
+            //Componentes de enterado
+            medioEmail=(CheckBox)findViewById(R.id.medio_e_mail);
+            medioWeb=(CheckBox)findViewById(R.id.medio_web);
+            medioReferencia=(CheckBox)findViewById(R.id.medio_referencia);
+            medioPapel=(CheckBox)findViewById(R.id.medio_papel);
+            medioTV=(CheckBox)findViewById(R.id.medio_tv);
+            medioFeria=(CheckBox)findViewById(R.id.medio_feria);
+            medioRadio=(CheckBox)findViewById(R.id.medio_radio);
+            medioOtros=(EditText)findViewById(R.id.medio_otros);
 
             //DECLARANDO CAMPOS OBLIGATORIOS
             //Declarando nombres
@@ -97,6 +106,54 @@ public class MainActivity extends ActionBarActivity {
         }
 
 
+        public void onStoryCheckBoxClicked(View view){
+            boolean checked = ((CheckBox) view).isChecked();
+            switch (view.getId()){
+                case R.id.medio_e_mail:
+                    if(checked){
+                        medioEmail.setChecked(true);
+                    }else{
+                        medioEmail.setChecked(false);
+                    }
+                    break;
+                case R.id.medio_web:
+                    if(checked){
+                        medioWeb.setChecked(true);
+                    }else{
+                        medioWeb.setChecked(false);
+                    }break;
+                case R.id.medio_referencia:
+                    if(checked){
+                        medioReferencia.setChecked(true);
+                    }else{
+                        medioReferencia.setChecked(false);
+                    }break;
+                case R.id.medio_papel:
+                    if(checked){
+                        medioPapel.setChecked(true);
+                    }else{
+                        medioPapel.setChecked(false);
+                    }break;
+                case R.id.medio_radio:
+                    if(checked){
+                        medioRadio.setChecked(true);
+                    }else{
+                        medioRadio.setChecked(false);
+                    }break;
+                case R.id.medio_tv:
+                    if(checked){
+                        medioTV.setChecked(true);
+                    }else{
+                        medioTV.setChecked(false);
+                    }break;
+                case R.id.medio_feria:
+                    if(checked){
+                        medioFeria.setChecked(true);
+                    }else{
+                        medioFeria.setChecked(false);
+                    }break;
+            }
+        }
         //public void click(view)
 
         public void onInterestCheckBoxClicked(View view){
@@ -141,13 +198,25 @@ public class MainActivity extends ActionBarActivity {
             return gender;
         }
 
-
         String preferencias(){
             String interes="";
             if (interesTelematica.isChecked())interes=interes+"Telematica/";
             if (interesTelecomunicaciones.isChecked())interes=interes+"Telecomunicaciones/";
             if (interesCurso.isChecked())interes=interes+interesCursoTexto.getText().toString();
             return interes;
+        }
+
+        String medios(){
+            String medios="";
+            if(medioEmail.isChecked())medios=medios+"E-mail/";
+            if(medioWeb.isChecked())medios=medios+"Web/";
+            if(medioReferencia.isChecked())medios=medios+"Referencias/";
+            if(medioPapel.isChecked())medios=medios+"Papel/";
+            if(medioRadio.isChecked())medios=medios+"Radio/";
+            if(medioTV.isChecked())medios=medios+"TV/";
+            if(medioFeria.isChecked())medios=medios+"Feria/";
+            medios=medios+medioOtros.getText().toString();
+            return medios;
         }
 
         private boolean checkObligatoryFields(){
@@ -222,6 +291,7 @@ public class MainActivity extends ActionBarActivity {
             String fechaText;
             String nombresCompletosText, apellidoPaternoText,apellidoMaternoText,dniText,distritoText;
             String telefonoCasaText, celularText, correoElectronicoText, preferenciasText;
+            String mediosText;
 
             //CAMPOS OPCIONALES
             String protoCadena;
@@ -252,7 +322,7 @@ public class MainActivity extends ActionBarActivity {
             domicilioText=domicilio.getText().toString();
             provinciaText=provincia.getText().toString();
             departamentoText=departamento.getText().toString();
-
+            mediosText=medios();
 
             String baseDir = android.os.Environment.getExternalStorageDirectory().getAbsolutePath();
             String fileName = "AnalysisData.csv";
@@ -263,12 +333,12 @@ public class MainActivity extends ActionBarActivity {
                     ,"Nombres","Apellido Paterno","Apellido Materno",
                     "Edad","Sexo","Fecha de Nacimiento","DNI",
                     "Domicilio","Distrito","Provincia","Departamento",
-                    "Telefono Fijo","Telefono Celular","E-mail","Intereses"};
+                    "Telefono Fijo","Telefono Celular","E-mail","Medios","Intereses"};
             String finalString[]={fechaText,institucionProcedenciaText,distritoProcedenciaText,tipoEventoText,
                     nombresCompletosText,apellidoPaternoText,apellidoMaternoText,
                     edadText,generoText,fechaNacimientoText,dniText,
                     domicilioText,distritoText,provinciaText,departamentoText,
-                    telefonoCasaText,celularText,correoElectronicoText,preferenciasText};
+                    telefonoCasaText,celularText,correoElectronicoText,mediosText,preferenciasText};
 
             String cabecera[]={"Fecha de Registro","Nombres","Apellido Paterno","Apellido Materno","DNI","Distrito","Telefono Fijo","Telefono Celular","E-mail","Intereses"};
             String cadenaFinal[]={lblFecha.getText().toString(),nombresCompletosText,apellidoPaternoText,apellidoMaternoText,dniText,distritoText,telefonoCasaText,celularText,correoElectronicoText,preferenciasText};
